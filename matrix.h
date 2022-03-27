@@ -1,6 +1,6 @@
-#ifndef MATRIX_H
+#ifndef MATRIX_HEADER
 
-#define MATRIX_H
+#define MATRIX_HEADER
 
 #include <iostream>
 #include <string>
@@ -15,8 +15,8 @@ template <typename T> class matrix {
 private:
   int rows, cols;
   T **data;
-  T **create(const int &rows_, const int &cols_) const;
-  void erase(T **data_, const int &rows_);
+  void create();
+  void erase();
 
 public:
   matrix();
@@ -52,5 +52,7 @@ public:
   matrix<T> operator/(const matrix<T> &other) const;
   matrix<T> &operator/=(const matrix<T> &other);
 };
+
+#include "matrix.tpp"
 
 #endif
