@@ -5,9 +5,7 @@
 #include <chrono>
 #include <random>
 #include <string>
-
 using std::string;
-
 class hillCipher {
 private:
   enum { ALPHABETS = 26 };
@@ -20,13 +18,12 @@ private:
 
 public:
   hillCipher(
-      const int &size =
-          3); // Mansour: initialize key, reverseKey, coprimeTo26,
+      const int&size =3); // Mansour: initialize key, reverseKey, coprimeTo26,
               // inverse + generateRandomKey
               // initialize rng as stated below:
               // rng(std::chrono::steady_clock::now().time_since_epoch().count())
   ~hillCipher(); // Mansour
-
+  void rowAddition(int mulRow, int additionRow,int mulVal);
   void generateRandomKey(); // Mansour
   bool isValidKey(const matrix<int> &key) const;
   bool setKey(const matrix<int> &key);
