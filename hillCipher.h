@@ -12,7 +12,7 @@ class hillCipher {
 private:
   enum { ALPHABETS = 26 };
   matrix<int> key, *reverseKey;
-  int coprimeTo26[12], inverse[ALPHABETS] /*inverse[nonCoprimeTo26] = 0*/;
+  int coprimeTo26[12], inverse[ALPHABETS];
   std::mt19937 rng;
 
   void fixReverseKeyIfDamaged(); // Mansour
@@ -31,11 +31,11 @@ public:
   bool isValidKey(const matrix<int> &key) const;
   bool setKey(const matrix<int> &key);
 
-  matrix<int> getKey() const;
-  matrix<int> getReverseKey();
+  const matrix<int> &getKey() const;
+  const matrix<int> &getReverseKey();
 
-  string encrypt(const string &plainText, const char &dummyLetter = 'a') const;
-  string decrypt(const string &cipherText); // Mansour
+  const string &encrypt(const string &plainText, char dummyLetter = 'a') const;
+  const string &decrypt(const string &cipherText); // Mansour
 };
 
 #endif

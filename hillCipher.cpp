@@ -23,47 +23,49 @@ bool hillCipher::setKey(const matrix<int> &key) {
   return true;
 }
 
-matrix<int> hillCipher::getKey() const { return key; }
+const matrix<int> &hillCipher::getKey() const { return key; }
 
-matrix<int> hillCipher::getReverseKey() {
+const matrix<int> &hillCipher::getReverseKey() {
   fixReverseKeyIfDamaged();
   return *reverseKey;
 }
 
-string hillCipher::encrypt(const string &plainText,
-                           const char &dummyLetter) const {
+const string &hillCipher::encrypt(const string &plainText,
+                                  char dummyLetter) const {
   int len = plainText.size(), matSize = key.getRows();
   matrix<int> textMat((len + matSize - 1) / matSize, matSize);
   int j = 0, k = 0;
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < len; ++i) {
     char c = plainText[i];
     if ('A' <= c && c <= 'Z')
       c += 'a' - 'A';
     textMat(j, k) = c - 'a';
-    k++;
+    ++k;
     if (k == matSize) {
-      j++;
+      ++j;
       k = 0;
     }
   }
+  dummyLetter -= 'a';
   while (k < matSize) {
-    textMat(j, k++) = dummyLetter - 'a';
-    len++;
+    textMat(j, k) = dummyLetter;
+    ++k;
+    ++len;
   }
   textMat *= key;
   textMat %= ALPHABETS;
   string cipherText(len, 0);
   j = 0;
   k = 0;
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < len; ++i) {
     cipherText[i] = textMat(j, k) + 'A';
-    k++;
+    ++k;
     if (k == matSize) {
-      j++;
+      ++j;
       k = 0;
     }
   }
   return cipherText;
 }
 
-string hillCipher::decrypt(const string &cipherText) {}
+const string &hillCipher::decrypt(const string &cipherText) {}
