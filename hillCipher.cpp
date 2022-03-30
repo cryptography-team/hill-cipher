@@ -5,6 +5,66 @@ void hillCipher::fixReverseKeyIfDamaged() {}
 
 void hillCipher::damageReverseKey() {}
 
+matrix<int> hillCipher::mulWithMod(const matrix<int> &mat1,
+                                   const matrix<int> &mat2) const {
+  int size1 = mat1.getRows(), size2 = mat1.getCols(), size3 = mat2.getCols();
+  matrix<int> res(size1, size3, 0);
+  for (int i = 0; i < size1; i++)
+    for (int j = 0; j < size3; j++)
+      for (int k = 0; k < size2; k++)
+        res(i, j) += mat1(i, k) * mat2(k, j);
+  return res;
+}
+
+int hillCipher::determinantWithMod(const matrix<int> &mat) const {
+  int size = mat.getRows();
+  if (size == 1)
+    return mat(0, 0);
+  matrix<int> tmp(size - 1, size - 1);
+  for (int i = 1; i < size; ++i)
+    for (int j = 1; j < size; ++j)
+      tmp(i - 1, j - 1) = mat(i, j);
+  int det = 0;
+  for (int i = 0, sign = 1; i < size; i++, sign *= -1) {
+    det += sign * mat(0, i) * determinantWithMod(tmp) % ALPHABETS;
+    if (det < 0)
+      det += ALPHABETS;
+    if (i != size - 1) {
+      for (int j = 1; j < size; j++)
+        tmp(j - 1, i) = mat(j, i);
+    }
+  }
+  return det;
+}
+
+matrix<int> hillCipher::adjugateWithMod(const matrix<int> &mat) const {
+  int size = mat.getRows();
+  matrix<int> adj(size, size);
+  for (int i = 0; i < size; ++i) {
+    matrix<int> tmp(size - 1, size - 1);
+    for (int j = 0, jj = 0; j < size; ++j)
+      if (j != i) {
+        for (int k = 1; k < size; ++k)
+          tmp(jj, k - 1) = mat(j, k);
+        ++jj;
+      }
+    for (int j = 0; j < size; ++j) {
+      adj(i, j) = (i + j) & 1 ? -1 : 1;
+      adj(i, j) *= determinantWithMod(tmp);
+      if (adj(i, j) < 0)
+        adj(i, j) += ALPHABETS;
+      if (j != size - 1) {
+        for (int k = 0, kk = 0; k < size; ++k)
+          if (k != i) {
+            tmp(kk, j) = mat(k, j);
+            ++kk;
+          }
+      }
+    }
+  }
+  return adj.transpose();
+}
+
 hillCipher::hillCipher(const int &size)
     : rng(std::chrono::steady_clock::now().time_since_epoch().count()),
       key(size, size) {
@@ -19,32 +79,30 @@ hillCipher::hillCipher(const int &size)
 hillCipher::~hillCipher() {}
 
 void hillCipher::generateRandomKey() {
-  using std::uniform_int_distribution;
-
   int len = key.getRows();
   for (int i = 0; i < len; i++) {
     key(i, i) = coprimeTo26[uniform_int_distribution<int>(0, 11)(rng)];
   }
-  cout << key << key.determinant() % ALPHABETS << endl;
   for (int i = 0; i < ALPHABETS; i++) {
     rowAddition(uniform_int_distribution<int>(0, len - 1)(rng),
                 uniform_int_distribution<int>(0, len - 1)(rng),
                 uniform_int_distribution<int>(0, ALPHABETS - 1)(rng));
   }
-  cout << key << key.determinant() % ALPHABETS + ALPHABETS << endl;
 }
 
 void hillCipher::rowAddition(int mulRow, int additionRow, int mulVal) {
   int len = key.getRows();
-  if (mulRow == additionRow)
+  if (mulValmul == 0 || Row == additionRow)
     return;
   for (int i = 0; i < len; i++) {
-    key(additionRow, i) += ((key(mulRow, i) * mulVal) % ALPHABETS) % ALPHABETS;
+    key(additionRow, i) += (key(mulRow, i) * mulVal) % ALPHABETS;
+    if (key(additionRow, i) >= ALPHABETS)
+      key(additionRow, i) -= ALPHABETS;
   }
 }
 
 bool hillCipher::isValidKey(const matrix<int> &key) const {
-  int det = key.determinant();
+  int det = determinantWithMod(key);
   return det % 2 != 0 && det != 13;
 }
 
@@ -84,8 +142,7 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
     ++k;
     ++len;
   }
-  textMat *= key;
-  textMat %= ALPHABETS;
+  textMat = mulWithMod(textMat, key);
   string cipherText(len, 0);
   j = 0;
   k = 0;
