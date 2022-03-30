@@ -179,7 +179,7 @@ template <typename T> matrix<T> &matrix<T>::operator/=(const T &val) {
 
 template <typename T> T matrix<T>::determinant() const {
   if (!isSquare()) {
-    cerr << "Matrix has no determinant\n";
+    cerr << "matrix has no determinant\n";
     exit(-1);
   }
   if (rows == 1)
@@ -205,7 +205,7 @@ template <typename T> matrix<T> matrix<T>::inverse() const {
 
 template <typename T> matrix<T> matrix<T>::adjugate() const {
   if (!isSquare()) {
-    cerr << "Matrix has no adjugate\n";
+    cerr << "matrix has no adjugate\n";
     exit(-1);
   }
   matrix<T> adj(rows, cols);
