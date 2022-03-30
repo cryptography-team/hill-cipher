@@ -251,7 +251,10 @@ template <typename T> matrix<T> matrix<T>::operator%(const int &val) const {
 
 template <typename T> matrix<T> &matrix<T>::operator%=(const int &val) {
   for (int i = 0; i < rows; i++)
-    for (int j = 0; j < cols; j++)
+    for (int j = 0; j < cols; j++) {
       data[i][j] %= val;
+      if (data[i][j] < 0)
+        data[i][j] += val;
+    }
   return *this;
 }
