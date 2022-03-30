@@ -30,8 +30,7 @@ const matrix<int> &hillCipher::getReverseKey() {
   return *reverseKey;
 }
 
-const string &hillCipher::encrypt(const string &plainText,
-                                  char dummyLetter) const {
+string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
   int len = plainText.size(), matSize = key.getRows();
   matrix<int> textMat((len + matSize - 1) / matSize, matSize);
   int j = 0, k = 0;
@@ -68,4 +67,4 @@ const string &hillCipher::encrypt(const string &plainText,
   return cipherText;
 }
 
-const string &hillCipher::decrypt(const string &cipherText) {}
+string hillCipher::decrypt(const string &cipherText) {}

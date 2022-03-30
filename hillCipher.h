@@ -34,8 +34,8 @@ public:
   const matrix<int> &getKey() const;
   const matrix<int> &getReverseKey();
 
-  const string &encrypt(const string &plainText, char dummyLetter = 'a') const;
-  const string &decrypt(const string &cipherText); // Mansour
+  string encrypt(const string &plainText, char dummyLetter = 'a') const;
+  string decrypt(const string &cipherText); // Mansour
 };
 
 #endif
