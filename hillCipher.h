@@ -12,7 +12,7 @@ class hillCipher {
 private:
   enum { ALPHABETS = 26 };
   matrix<int> key, *reverseKey;
-  int coprimeTo26[12], inverse[ALPHABETS];
+  int coprimeTo26[12], inverse[ALPHABETS] /*inverse[nonCoprimeTo26] = 0*/;
   std::mt19937 rng;
 
   void fixReverseKeyIfDamaged(); // Mansour
@@ -20,7 +20,7 @@ private:
 
 public:
   hillCipher(
-      int size =
+      const int &size =
           3); // Mansour: initialize key, reverseKey, coprimeTo26,
               // inverse + generateRandomKey
               // initialize rng as stated below:

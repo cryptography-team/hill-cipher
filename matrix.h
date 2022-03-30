@@ -50,6 +50,8 @@ public:
   matrix<T> adjugate() const;
   matrix<T> operator/(const matrix<T> &other) const;
   matrix<T> &operator/=(const matrix<T> &other);
+  matrix<T> operator%(const int &val) const;
+  matrix<T> &operator%=(const int &val);
 };
 
 #include "matrix.tpp"

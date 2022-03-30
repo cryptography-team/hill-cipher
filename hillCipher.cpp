@@ -4,7 +4,7 @@ void hillCipher::fixReverseKeyIfDamaged() {}
 
 void hillCipher::damageReverseKey() {}
 
-hillCipher::hillCipher(int size) {}
+hillCipher::hillCipher(const int &size) {}
 
 hillCipher::~hillCipher() {}
 
@@ -51,6 +51,7 @@ string hillCipher::encrypt(const string &plainText,
     len++;
   }
   textMat *= key;
+  textMat %= ALPHABETS;
   string cipherText(len, 0);
   j = 0;
   k = 0;
