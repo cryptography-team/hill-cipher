@@ -88,6 +88,8 @@ hillCipher::hillCipher(const int &size)
   }
   for (int k = 0; k < ALPHABETS; k++) {
     inverse[k] = -1;
+    if(!k%2 || k==13)
+        continue;
     for (int j = 0; j < ALPHABETS; j++) {
       if (k * j % ALPHABETS == 1) {
         inverse[k] = j;
@@ -98,7 +100,9 @@ hillCipher::hillCipher(const int &size)
   generateRandomKey(); // initialize key matrix and generate it randomly
 }
 
-hillCipher::~hillCipher() { delete reverseKey; }
+hillCipher::~hillCipher() {
+    if(!reverseKey)
+     delete reverseKey; }
 
 void hillCipher::generateRandomKey() {
   key.fill(0);
