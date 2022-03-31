@@ -1,11 +1,11 @@
-//#include "hillCipher.h"
-//#include "matrix.h"
+#include "hillCipher.h"
+#include "matrix.h"
 #include <iostream>
 
 using namespace std;
 
 int main() {
-  // hillCipher tool;
+  hillCipher tool;
   cout
       << "  ================================================================\n";
   cout << "\tHill Cipher tool was initiated with a random key.\n";
@@ -32,11 +32,14 @@ int main() {
       break;
     // Other cases here...
     default:
-      cout << "Please enter a valid number..." << endl;
+      cout << "\tPlease enter a valid number..." << endl;
     }
+    cout << "\n\tPress any key to continue..." << endl;
 #ifdef __unix__
+    system("read");
     system("clear");
 #else
+    system("pause");
     system("cls");
 #endif
   }
