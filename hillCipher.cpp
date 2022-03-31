@@ -127,14 +127,20 @@ const matrix<int> &hillCipher::getReverseKey() {
 }
 
 string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
-  int len = plainText.size(), matSize = key.getRows();
-  matrix<int> textMat((len + matSize - 1) / matSize, matSize);
+  int len = plainText.size(), matSize = key.getRows(), numOfChars = 0;
+  for (const char &c : plainText)
+    numOfChar += ('A' <= c && c <= 'Z') || ('a' <= c <= 'z');
+  matrix<int> textMat((numOfChars + matSize - 1) / matSize, matSize);
   int j = 0, k = 0;
   for (int i = 0; i < len; ++i) {
     char c = plainText[i];
     if ('A' <= c && c <= 'Z')
-      c += 'a' - 'A';
-    textMat(j, k) = c - 'a';
+      c -= 'A';
+    else if ('a' <= c && c <= 'z')
+      c -= 'a';
+    else
+      continue;
+    textMat(j, k) = c;
     ++k;
     if (k == matSize) {
       ++j;
@@ -145,14 +151,14 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
   while (k < matSize) {
     textMat(j, k) = dummyLetter;
     ++k;
-    ++len;
+    ++numOfChars;
   }
   textMat = mulWithMod(textMat, key);
-  string cipherText(len, 0);
+  string cipherText(numOfChars, 'A');
   j = 0;
   k = 0;
-  for (int i = 0; i < len; ++i) {
-    cipherText[i] = textMat(j, k) + 'A';
+  for (int i = 0; i < numOfChars; ++i) {
+    cipherText[i] += textMat(j, k);
     ++k;
     if (k == matSize) {
       ++j;
