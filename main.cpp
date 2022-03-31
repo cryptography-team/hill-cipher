@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
   hillCipher tool;
-  string plain = "muns and yasser";
+  string plain = "Muns And Yasser";
   string cipher;
   matrix<int> key(3, 3);
   matrix<int> reversekey(3, 3);
@@ -34,19 +34,34 @@ int main() {
     switch (choice) {
     case 1:
       char ch;
-      cout << "Existing plain text is : <" << plain
+      cout << "\tExisting plain text is : <" << plain
            << "> continue with this plain? press y if you or n if u don't : ";
       cin >> ch;
       if (ch == 'n') {
-        cout << "Set your plain:\n" << flush;
-        cin.ignore(1000, '\n');
+        cout << "\tSet your plain:\n" << flush;
+        cin.ignore();
         getline(cin, plain);
       }
       cipher = tool.encrypt(plain);
-      cout << cipher;
+      cout <<"\t" <<cipher;
       break;
     case 2:
-      cout << tool.decrypt(cipher);
+        cout<< "\tcontinue with the existing ciphertext? press y if you or n if u don't : ";
+      cin >> ch;
+      if (ch == 'n') {
+        cout << "\tSet your cipher text:\n" << flush;
+        cin.ignore();
+        getline(cin, cipher);
+      }
+      else
+      {
+          cipher = tool.encrypt(plain);
+      }
+      plain = tool.decrypt(cipher);
+      if(plain == "")
+        cout<<"\tNot valid cipher\n";
+      cout << "\t"<<plain;
+      cout<<"\n\t!!!Don't worry number of 'a' in the end of text cause 'a' is the default dummy character\n" <<flush;
       break;
     case 3:
       cout << tool.getKey();
@@ -56,19 +71,19 @@ int main() {
       break;
     case 5:
       int siz;
-      cout << "Set your key size: " << flush;
+      cout << "\tSet your key size: " << flush;
       cin >> siz;
       key = matrix<int>(siz, siz);
       reversekey = matrix<int>(siz, siz);
-      cout << "Enter your key row by row with space between every two columns "
+      cout << "\tEnter your key row by row with space between every two columns "
               "and break line between every two rows...\n";
       for (int i = 0; i < siz; i++)
         for (int j = 0; j < siz; j++)
           cin >> key(i, j);
       if (!tool.isValidKey(key))
-        cout << "Sad not valid key\n";
+        cout << "\tSad not valid key try again key not set yet\n";
       else
-        cout << "Perfecto valid key\n";
+        cout << "\tPerfecto valid key\n";
       break;
     case 6:
       tool.generateRandomKey();
