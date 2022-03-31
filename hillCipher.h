@@ -30,7 +30,7 @@ public:
   hillCipher(const int &size = 3);
   ~hillCipher();
 
-  void generateRandomKey();
+  void generateRandomKey(const int &size = 3);
   bool isValidKey(const matrix<int> &key) const;
   bool setKey(const matrix<int> &key);
 

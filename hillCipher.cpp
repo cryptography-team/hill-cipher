@@ -96,7 +96,7 @@ hillCipher::hillCipher(const int &size)
       }
     }
   }
-  generateRandomKey(); // initialize key matrix and generate it randomly
+  generateRandomKey(size); // initialize key matrix and generate it randomly
 }
 
 hillCipher::~hillCipher() {
@@ -104,15 +104,14 @@ hillCipher::~hillCipher() {
     delete reverseKey;
 }
 
-void hillCipher::generateRandomKey() {
-  key.fill(0);
-  int len = key.getRows();
-  for (int i = 0; i < len; i++) {
+void hillCipher::generateRandomKey(const int &size) {
+  key = matrix<int>(size, size, 0);
+  for (int i = 0; i < size; i++) {
     key(i, i) = coprimeTo26[uniform_int_distribution<int>(0, 11)(rng)];
   }
   for (int i = 0; i < ALPHABETS; i++) {
-    rowAddition(uniform_int_distribution<int>(0, len - 1)(rng),
-                uniform_int_distribution<int>(0, len - 1)(rng),
+    rowAddition(uniform_int_distribution<int>(0, size - 1)(rng),
+                uniform_int_distribution<int>(0, size - 1)(rng),
                 uniform_int_distribution<int>(0, ALPHABETS - 1)(rng));
   }
 }
@@ -171,8 +170,8 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
       k = 0;
     }
   }
-  dummyLetter -= 'a';
   if (k != 0) {
+    dummyLetter -= 'a';
     while (k < matSize) {
       textMat(j, k) = dummyLetter;
       ++k;
@@ -197,20 +196,21 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
 string hillCipher::decrypt(const string &cipherText) {
   if (cipherText.empty())
     return "";
-  int siz = cipherText.size();
-  int len = Key.getRows();
-  if (siz % len)
+  int size = cipherText.size();
+  int len = key.getRows();
+  if (size % len)
     return "";
   string res;
   fixReverseKeyIfDamaged();
-  matrix<int> plain(siz / len, len);
-  for (int i = 0; i < siz; i += len) {
+  matrix<int> plain(size / len, len);
+  for (int i = 0; i < size; i += len) {
     for (int j = 0; j < len; j++)
       plain(i / len, j) = cipherText[i + j] - 'A';
   }
   plain = mulWithMod(plain, *reverseKey);
-  for (int i = 0; i < plain.getRows(); i++)
-    for (int j = 0; j < plain.getCols(); j++)
-      res += (plain(i, j) + 'a');
+  int rows = plain.getRows(), cols = plain.getCols();
+  for (int i = 0; i < rows; i++)
+    for (int j = 0; j < cols; j++)
+      res += plain(i, j) + 'a';
   return res;
 }
