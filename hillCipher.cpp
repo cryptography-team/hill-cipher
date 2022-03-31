@@ -108,7 +108,7 @@ void hillCipher::rowAddition(int mulRow, int additionRow, int mulVal) {
 
 bool hillCipher::isValidKey(const matrix<int> &key) const {
   int det = determinantWithMod(key);
-  return det % 2 != 0 && det != 13;
+  return inverse[det] != -1;
 }
 
 bool hillCipher::setKey(const matrix<int> &key) {
