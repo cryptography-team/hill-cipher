@@ -22,7 +22,7 @@ void getText(const string &type, string &text) {
       while (getline(in, tmp))
         text += tmp;
     } else {
-      cout << "\tSet your " << type << " text (in one line):" << endl;
+      cout << "\tSet your " << type << " text (in one line):\n\t" << flush;
       cin.ignore();
       getline(cin, text);
     }
