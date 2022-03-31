@@ -16,6 +16,7 @@ private:
 
   void fixReverseKeyIfDamaged(); // Mansour
   void damageReverseKey();       // Mansour
+
   matrix<int> mulWithMod(const matrix<int> &mat1,
                          const matrix<int> &mat2) const;
   int determinantWithMod(const matrix<int> &mat) const;
@@ -30,6 +31,7 @@ public:
               // rng(std::chrono::steady_clock::now().time_since_epoch().count())
   ~hillCipher(); // Mansour
   void rowAddition(int mulRow, int additionRow, int mulVal);
+
   void generateRandomKey(); // Mansour
   bool isValidKey(const matrix<int> &key) const;
   bool setKey(const matrix<int> &key);

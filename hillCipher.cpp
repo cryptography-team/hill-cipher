@@ -11,8 +11,11 @@ matrix<int> hillCipher::mulWithMod(const matrix<int> &mat1,
   matrix<int> res(size1, size3, 0);
   for (int i = 0; i < size1; i++)
     for (int j = 0; j < size3; j++)
-      for (int k = 0; k < size2; k++)
-        res(i, j) += mat1(i, k) * mat2(k, j);
+      for (int k = 0; k < size2; k++) {
+        res(i, j) += mat1(i, k) * mat2(k, j) % ALPHABETS;
+        if (res(i, j) >= ALPHABETS)
+          res(i, j) -= ALPHABETS;
+      }
   return res;
 }
 
@@ -29,6 +32,8 @@ int hillCipher::determinantWithMod(const matrix<int> &mat) const {
     det += sign * mat(0, i) * determinantWithMod(tmp) % ALPHABETS;
     if (det < 0)
       det += ALPHABETS;
+    else if (det >= ALPHABETS)
+      det -= ALPHABETS;
     if (i != size - 1) {
       for (int j = 1; j < size; j++)
         tmp(j - 1, i) = mat(j, i);
@@ -92,7 +97,7 @@ void hillCipher::generateRandomKey() {
 
 void hillCipher::rowAddition(int mulRow, int additionRow, int mulVal) {
   int len = key.getRows();
-  if (mulValmul == 0 || Row == additionRow)
+  if (mulValmul == 0 || mulRow == additionRow)
     return;
   for (int i = 0; i < len; i++) {
     key(additionRow, i) += (key(mulRow, i) * mulVal) % ALPHABETS;
@@ -157,4 +162,16 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
   return cipherText;
 }
 
-string hillCipher::decrypt(const string &cipherText) {}
+string hillCipher::decrypt(const string &cipherText) {
+  int siz = cipherText.size();
+  int len = reverseKey.getRows();
+  if (siz % len)
+    return "";
+  fixReverseKeyIfDamaged();
+  matrix<int> plain(siz / len, len);
+  for (int i = 0; i < siz; i += len) {
+    for (int j = 0; j < len; j++)
+      plain(i / len, j) = cipherText[i + j] - 'A';
+  }
+  plain = mulWithMod(plain, reverseKey);
+}
