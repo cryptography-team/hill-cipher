@@ -9,6 +9,8 @@ int main() {
   string plain = "Muns And Yasser";
   string cipher;
   matrix<int> key(3, 3);
+  int size;
+
   matrix<int> reversekey(3, 3);
   cout
       << "  ================================================================\n";
@@ -23,7 +25,7 @@ int main() {
     cout << "\t2- Decrypt a cipher text using the current key\n";
     cout << "\t3- Get the current key\n";
     cout << "\t4- Get the current reverse key\n";
-    cout << "\t5- Set a key\n";
+    cout << "\t5- Set a custom key\n";
     cout << "\t6- Set a random key\n";
     cout << "\t7- Exit the program\n";
     cout << "\n\tYour choice is [1-7]: " << flush;
@@ -34,34 +36,36 @@ int main() {
     switch (choice) {
     case 1:
       char ch;
-      cout << "\tExisting plain text is : <" << plain
-           << "> continue with this plain? press y if you or n if u don't : ";
+      cout << "\tThe last plain text was \"" << plain
+           << "\".. Continue with this plain text? (Y/n): " << flush;
       cin >> ch;
       if (ch == 'n') {
-        cout << "\tSet your plain:\n" << flush;
+        cout << "\tSet your plain text (in one line):" << endl;
         cin.ignore();
         getline(cin, plain);
       }
-      cipher = tool.encrypt(plain);
-      cout <<"\t" <<cipher;
+      cout << "\tSet your dummy letter that will be used in case the plain "
+           << "text was not long enough: " << flush;
+      char dummyLetter;
+      cin >> dummyLetter;
+      cipher = tool.encrypt(plain, dummyLetter);
+      cout << "\tThis is the corresponding cipher text:\n\t" << cipher;
       break;
     case 2:
-        cout<< "\tcontinue with the existing ciphertext? press y if you or n if u don't : ";
+      cout << "\tThe last cipher text was \"" << cipher
+           << "\".. Continue with the last cipher text? (Y/n): " << flush;
       cin >> ch;
       if (ch == 'n') {
-        cout << "\tSet your cipher text:\n" << flush;
+        cout << "\tSet your cipher text (in one line):" << endl;
         cin.ignore();
         getline(cin, cipher);
       }
-      else
-      {
-          cipher = tool.encrypt(plain);
-      }
       plain = tool.decrypt(cipher);
-      if(plain == "")
-        cout<<"\tNot valid cipher\n";
-      cout << "\t"<<plain;
-      cout<<"\n\t!!!Don't worry number of 'a' in the end of text cause 'a' is the default dummy character\n" <<flush;
+      if (plain.empty() && !cipher.empty())
+        cout << "\tNot a valid cipher.. Cipher's size is not divisible by "
+             << "matrix size (add some dummy letters)\n";
+      if (cipher.empty() || !plain.empty())
+        cout << "\tThis is the corresponding plain text:\n\t" << plain;
       break;
     case 3:
       cout << tool.getKey();
@@ -70,26 +74,31 @@ int main() {
       cout << tool.getReverseKey();
       break;
     case 5:
-      int siz;
+      int size;
       cout << "\tSet your key size: " << flush;
-      cin >> siz;
-      key = matrix<int>(siz, siz);
-      reversekey = matrix<int>(siz, siz);
-      cout << "\tEnter your key row by row with space between every two columns "
-              "and break line between every two rows...\n";
-      for (int i = 0; i < siz; i++)
-        for (int j = 0; j < siz; j++)
+      cin >> size;
+      key = matrix<int>(size, size);
+      reversekey = matrix<int>(size, size);
+      cout << "\tEnter your " << size << 'x' << size
+           << " key (one row on each line):" << endl;
+      for (int i = 0; i < size; i++) {
+        cout << '\t' << flush;
+        for (int j = 0; j < size; j++)
           cin >> key(i, j);
-      if (!tool.isValidKey(key))
-        cout << "\tSad not valid key try again key not set yet\n";
+      }
+      if (!tool.setKey(key))
+        cout << "\tSad.. Not a valid key.. This key will not be set.";
       else
-        cout << "\tPerfecto valid key\n";
+        cout << "\tPerfecto.. The key has been set.";
       break;
     case 6:
-      tool.generateRandomKey();
+      cout << "\tSet your key size: " << flush;
+      cin >> size;
+      tool.generateRandomKey(size);
+      cout << "\tThis random key has been set:\n" << tool.getKey();
       break;
     default:
-      cout << "\tPlease enter a valid number...";
+      cout << "\tPlease enter a valid option...";
     }
     cout << endl;
 #ifdef __unix__
