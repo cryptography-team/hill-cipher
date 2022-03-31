@@ -48,7 +48,6 @@ template <typename T> void matrix<T>::erase() {
 
 template <typename TT>
 ostream &operator<<(ostream &out, const matrix<TT> &cur) {
-  out << '(' << cur.rows << ", " << cur.cols << ")\n";
   for (int i = 0; i < cur.rows; i++)
     for (int j = 0; j < cur.cols; j++)
       out << cur(i, j) << " \n"[j == cur.cols - 1];
