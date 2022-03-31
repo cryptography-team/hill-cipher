@@ -86,9 +86,8 @@ int main() {
     default:
       cout << "\tPlease enter a valid number..." << endl;
     }
-    cout << "\n\tPress any key to continue..." << endl;
 #ifdef __unix__
-    system("read");
+    system("read -p \"Press return key to continue...\"");
     system("clear");
 #else
     system("pause");
@@ -99,21 +98,4 @@ int main() {
       << "  ================================================================\n";
   cout << "\tSad to see you go :(\n";
   return 0;
-}
-break;
-// Other cases here...
-default:
-cout << "\tPlease enter a valid number..." << endl;
-}
-#ifdef __unix__
-system("read -p \"Press return key to continue...\"");
-system("clear");
-#else
-system("pause");
-system("cls");
-#endif
-}
-cout << "  ================================================================\n";
-cout << "\tSad to see you go :(\n";
-return 0;
 }
