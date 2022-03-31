@@ -37,19 +37,16 @@ int main() {
       cout << "Existing plain text is : <" << plain
            << "> continue with this plain? press y if you or n if u don't : ";
       cin >> ch;
-
       if (ch == 'n') {
-        cout << "Set your plain : ";
-        plain = "";
-        cin >> plain;
+        cout << "Set your plain:\n" << flush;
+        cin.ignore(1000, '\n');
+        getline(cin, plain);
       }
       cipher = tool.encrypt(plain);
-      cout << "\n" << cipher;
-
+      cout << cipher;
       break;
     case 2:
       cout << tool.decrypt(cipher);
-
       break;
     case 3:
       cout << tool.getKey();
@@ -59,33 +56,27 @@ int main() {
       break;
     case 5:
       int siz;
-      cout << "Set your key size : ";
+      cout << "Set your key size: " << flush;
       cin >> siz;
       key = matrix<int>(siz, siz);
       reversekey = matrix<int>(siz, siz);
       cout << "Enter your key row by row with space between every two columns "
-              "and break line between every two rows... \n";
-      for (int i = 0; i < siz; i++) {
-        for (int j = 0; j < siz; j++) {
+              "and break line between every two rows...\n";
+      for (int i = 0; i < siz; i++)
+        for (int j = 0; j < siz; j++)
           cin >> key(i, j);
-          cout << " ";
-        }
-        cout << "\n";
-      }
       if (!tool.isValidKey(key))
-        cout << "Sad not valid key \n";
+        cout << "Sad not valid key\n";
       else
-        cout << "Perfecto valid key \n";
+        cout << "Perfecto valid key\n";
       break;
     case 6:
       tool.generateRandomKey();
       break;
-    case 7:
-      exit(-1);
-      break;
     default:
-      cout << "\tPlease enter a valid number..." << endl;
+      cout << "\tPlease enter a valid number...";
     }
+    cout << endl;
 #ifdef __unix__
     system("read -p \"Press return key to continue...\"");
     system("clear");
