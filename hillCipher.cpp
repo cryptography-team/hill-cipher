@@ -149,6 +149,8 @@ const matrix<int> &hillCipher::getReverseKey() {
 }
 
 string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
+  if (plainText.empty())
+    return "";
   int len = plainText.size(), matSize = key.getRows(), numOfChars = 0;
   for (const char &c : plainText)
     numOfChars += ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
@@ -191,6 +193,8 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
 }
 
 string hillCipher::decrypt(const string &cipherText) {
+  if (cipherText.empty())
+    return "";
   int siz = cipherText.size();
   fixReverseKeyIfDamaged();
   int len = reverseKey->getRows();
