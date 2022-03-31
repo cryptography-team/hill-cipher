@@ -16,7 +16,11 @@ int main() {
            "================================================================\n";
     cout << "\tChoose one of the following options:\n";
     cout << "\t1- Encrypt a plain text using the current key.\n";
-    // Other options here...
+    cout << "\t2- Decrypt";
+    cout << "\t3- Get key";
+    cout << "\t4- Get reverse key";
+    cout << "\t5- Set key";
+    cout << "\t6- Set random key";
     cout << "\t7- Exit the program.\n";
     cout << "\n\tYour choice is [1, 7]: " << flush;
     int choice;
