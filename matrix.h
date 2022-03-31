@@ -1,6 +1,7 @@
 #ifndef MATRIX_HEADER
 #define MATRIX_HEADER
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 
