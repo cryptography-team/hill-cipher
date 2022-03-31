@@ -198,11 +198,11 @@ string hillCipher::decrypt(const string &cipherText) {
   if (cipherText.empty())
     return "";
   int siz = cipherText.size();
-  fixReverseKeyIfDamaged();
-  int len = reverseKey->getRows();
+  int len = Key.getRows();
   if (siz % len)
     return "";
   string res;
+  fixReverseKeyIfDamaged();
   matrix<int> plain(siz / len, len);
   for (int i = 0; i < siz; i += len) {
     for (int j = 0; j < len; j++)
