@@ -73,7 +73,9 @@ int main() {
         cout << "\n";
       }
       if (!tool.isValidKey(key))
-        cout << "Not valid key \n";
+        cout << "Sad not valid key \n";
+      else
+        cout << "Perfecto valid key \n";
       break;
     case 6:
       tool.generateRandomKey();
@@ -81,7 +83,6 @@ int main() {
     case 7:
       exit(-1);
       break;
-    // Other cases here...
     default:
       cout << "\tPlease enter a valid number..." << endl;
     }
