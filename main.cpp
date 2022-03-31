@@ -72,7 +72,9 @@ int main() {
             cout<<"\n";
         }
         if(!tool.isValidKey(key))
-            cout<<"Not valid key \n";
+            cout<<"Sad not valid key \n";
+        else 
+            cout<<"Perfecto valid key \n";
         break;
     case 6:
         tool.generateRandomKey();
