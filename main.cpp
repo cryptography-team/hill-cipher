@@ -15,14 +15,14 @@ int main() {
         << "  "
            "================================================================\n";
     cout << "\tChoose one of the following options:\n";
-    cout << "\t1- Encrypt a plain text using the current key.\n";
-    cout << "\t2- Decrypt";
-    cout << "\t3- Get key";
-    cout << "\t4- Get reverse key";
-    cout << "\t5- Set key";
-    cout << "\t6- Set random key";
-    cout << "\t7- Exit the program.\n";
-    cout << "\n\tYour choice is [1, 7]: " << flush;
+    cout << "\t1- Encrypt a plain text using the current key\n";
+    cout << "\t2- Decrypt a cipher text using the current key\n";
+    cout << "\t3- Get the current key\n";
+    cout << "\t4- Get the current reverse key\n";
+    cout << "\t5- Set a key\n";
+    cout << "\t6- Set a random key\n";
+    cout << "\t7- Exit the program\n";
+    cout << "\n\tYour choice is [1-7]: " << flush;
     int choice;
     cin >> choice;
     if (choice == 7)
@@ -38,9 +38,8 @@ int main() {
     default:
       cout << "\tPlease enter a valid number..." << endl;
     }
-    cout << "\n\tPress any key to continue..." << endl;
 #ifdef __unix__
-    system("read");
+    system("read -p \"Press return key to continue...\"");
     system("clear");
 #else
     system("pause");
