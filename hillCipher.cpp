@@ -172,10 +172,12 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
     }
   }
   dummyLetter -= 'a';
-  while (k < matSize) {
-    textMat(j, k) = dummyLetter;
-    ++k;
-    ++numOfChars;
+  if (k != 0) {
+    while (k < matSize) {
+      textMat(j, k) = dummyLetter;
+      ++k;
+      ++numOfChars;
+    }
   }
   textMat = mulWithMod(textMat, key);
   string cipherText(numOfChars, 'A');
