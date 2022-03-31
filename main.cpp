@@ -63,7 +63,7 @@ int main() {
         cin >> siz;
         key = matrix<int>(siz,siz);
         reversekey = matrix<int>(siz,siz);
-        cout<<"Enter your key row by row with space between columns... \n";
+        cout<<"Enter your key row by row with space between every two columns and break line between every two rows... \n";
         for(int i = 0 ;i<siz;i++){
             for(int j = 0;j<siz;j++){
                 cin>>key(i,j);
