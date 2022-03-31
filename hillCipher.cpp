@@ -1,6 +1,5 @@
 #include "hillCipher.h"
-using std::cout;
-using std::endl;
+
 void hillCipher::fixReverseKeyIfDamaged() {
   if (reverseKey != NULL)
     return;
@@ -88,8 +87,8 @@ hillCipher::hillCipher(const int &size)
   }
   for (int k = 0; k < ALPHABETS; k++) {
     inverse[k] = -1;
-    if(!k%2 || k==13)
-        continue;
+    if (!k % 2 || k == 13)
+      continue;
     for (int j = 0; j < ALPHABETS; j++) {
       if (k * j % ALPHABETS == 1) {
         inverse[k] = j;
@@ -101,8 +100,9 @@ hillCipher::hillCipher(const int &size)
 }
 
 hillCipher::~hillCipher() {
-    if(!reverseKey)
-     delete reverseKey; }
+  if (!reverseKey)
+    delete reverseKey;
+}
 
 void hillCipher::generateRandomKey() {
   key.fill(0);
@@ -196,7 +196,7 @@ string hillCipher::decrypt(const string &cipherText) {
   int len = reverseKey->getRows();
   if (siz % len)
     return "";
-  string res = "";
+  string res;
   matrix<int> plain(siz / len, len);
   for (int i = 0; i < siz; i += len) {
     for (int j = 0; j < len; j++)
