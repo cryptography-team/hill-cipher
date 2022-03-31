@@ -5,8 +5,10 @@
 #include <chrono>
 #include <random>
 #include <string>
+
 using std::string;
 using std::uniform_int_distribution;
+
 class hillCipher {
 private:
   enum { ALPHABETS = 26 };
@@ -22,6 +24,8 @@ private:
   int determinantWithMod(const matrix<int> &mat) const;
   matrix<int> adjugateWithMod(const matrix<int> &mat) const;
 
+  void rowAddition(int mulRow, int additionRow, int mulVal);
+
 public:
   hillCipher(
       const int &size =
@@ -30,7 +34,6 @@ public:
               // initialize rng as stated below:
               // rng(std::chrono::steady_clock::now().time_since_epoch().count())
   ~hillCipher(); // Mansour
-  void rowAddition(int mulRow, int additionRow, int mulVal);
 
   void generateRandomKey(); // Mansour
   bool isValidKey(const matrix<int> &key) const;
