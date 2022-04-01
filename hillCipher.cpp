@@ -10,7 +10,10 @@ void hillCipher::fixReverseKey() {
   *reverseKey %= ALPHABETS;
 }
 
-void hillCipher::damageReverseKey() { delete reverseKey; reverseKey = NULL; }
+void hillCipher::damageReverseKey() { 
+   if(!reverseKey)
+        return;
+  delete reverseKey; reverseKey = NULL; }
 
 matrix<int> hillCipher::mulWithMod(const matrix<int> &mat1,
                                    const matrix<int> &mat2) const {
@@ -79,8 +82,7 @@ matrix<int> hillCipher::adjugateWithMod(const matrix<int> &mat) const {
 
 hillCipher::hillCipher(const int &size)
     : rng(std::chrono::steady_clock::now().time_since_epoch().count()),
-      key(size, size) {
-  reverseKey = NULL;
+      key(size, size),reverseKey(NULL) {
   for (int i = 0, j = 1; i < 12; i++, j += 2) {
     if (j == 13)
       j += 2;
@@ -88,7 +90,7 @@ hillCipher::hillCipher(const int &size)
   }
   for (int k = 0; k < ALPHABETS; k++) {
     inverse[k] = -1;
-    if (!k % 2 || k == 13)
+    if (!(k % 2) || k == 13)
       continue;
     for (int j = 0; j < ALPHABETS; j++) {
       if (k * j % ALPHABETS == 1) {
