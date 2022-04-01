@@ -6,8 +6,8 @@
 using namespace std;
 
 void getText(const string &type, string &text) {
-  cout << "\tThe last " << type << " text was \"" << text
-       << "\".. Continue with this " << type << " text? (Y/n): " << flush;
+  cout << "\tThe last " << type << " text was \"" << text << "\"..\n\t"
+       << "Continue with this " << type << " text? (Y/n): " << flush;
   char ch;
   cin >> ch;
   if (ch == 'n') {
@@ -54,7 +54,7 @@ int main() {
   matrix<int> reversekey(3, 3);
   cout
       << "  ================================================================\n";
-  cout << "\tHill Cipher tool was initiated with a random key.\n";
+  cout << "\tHill Cipher tool was initiated with a 3x3 random key.\n";
   cout << "\tHope it will be a good interface. Use it as you wish :)\n";
   while (true) {
     cout
@@ -93,10 +93,10 @@ int main() {
         printText("plain", plain);
       break;
     case 3:
-      cout << tool.getKey() << endl;
+      cout << tool.getKey();
       break;
     case 4:
-      cout << tool.getReverseKey() << endl;
+      cout << tool.getReverseKey();
       break;
     case 5:
       int size;
@@ -121,11 +121,12 @@ int main() {
       cout << "\tSet your key size: " << flush;
       cin >> size;
       tool.generateRandomKey(size);
-      cout << "\tThis random key has been set:\n" << tool.getKey() << endl;
+      cout << "\tThis random key has been set:\n" << tool.getKey();
       break;
     default:
       cout << "\tPlease enter a valid option..." << endl;
     }
+    cout << endl;
 #ifdef __unix__
     system("read -p \"Press return key to continue...\"");
     system("clear");
