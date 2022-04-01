@@ -16,7 +16,7 @@ private:
   int coprimeTo26[12], inverse[ALPHABETS];
   std::mt19937 rng;
 
-  void fixReverseKeyIfDamaged();
+  void fixReverseKey();
   void damageReverseKey();
 
   matrix<int> mulWithMod(const matrix<int> &mat1,

@@ -1,15 +1,16 @@
 #include "hillCipher.h"
 
-void hillCipher::fixReverseKeyIfDamaged() {
+void hillCipher::fixReverseKey() {
   if (reverseKey != NULL)
     return;
-  reverseKey = new matrix<int>(key.getRows(), key.getRows());
+  reverseKey = new matrix<int>(key.getRows(),
+                                key.getRows());
   *reverseKey = adjugateWithMod(key);
   *reverseKey *= inverse[determinantWithMod(key)];
   *reverseKey %= ALPHABETS;
 }
 
-void hillCipher::damageReverseKey() { reverseKey = NULL; }
+void hillCipher::damageReverseKey() { delete reverseKey; reverseKey = NULL; }
 
 matrix<int> hillCipher::mulWithMod(const matrix<int> &mat1,
                                    const matrix<int> &mat2) const {
@@ -105,6 +106,7 @@ hillCipher::~hillCipher() {
 }
 
 void hillCipher::generateRandomKey(const int &size) {
+    damageReverseKey();
   key = matrix<int>(size, size, 0);
   for (int i = 0; i < size; i++) {
     key(i, i) = coprimeTo26[uniform_int_distribution<int>(0, 11)(rng)];
@@ -143,7 +145,7 @@ bool hillCipher::setKey(const matrix<int> &key) {
 const matrix<int> &hillCipher::getKey() const { return key; }
 
 const matrix<int> &hillCipher::getReverseKey() {
-  fixReverseKeyIfDamaged();
+  fixReverseKey();
   return *reverseKey;
 }
 
@@ -201,7 +203,7 @@ string hillCipher::decrypt(const string &cipherText) {
   if (size % len)
     return "";
   string res;
-  fixReverseKeyIfDamaged();
+  fixReverseKey();
   matrix<int> plain(size / len, len);
   for (int i = 0; i < size; i += len) {
     for (int j = 0; j < len; j++)
