@@ -97,15 +97,21 @@ void hillCipher::rowAddition(int mulRow, int additionRow, int mulVal) {
 hillCipher::hillCipher(const int &size)
     : rng(std::chrono::steady_clock::now().time_since_epoch().count()),
       key(size, size), reverseKey(NULL) {
-  for (int i = 0, j = 1; i < 12; i++, j += 2) { // To make sure our key will has a determinate with gcd to 26 = 1
-    if (j == 13)                                // We generate a diagonal matrix with all numbers are relatively prime
-      j += 2;                                   // Under 26 we have a 12 coprimes to 26 all numbers expect even numbers and 13
+// To make sure our key will has a determinate with gcd to 26 = 1
+// We generate a diagonal matrix with all numbers are relatively prime
+// Under 26 we have a 12 coprimes to 26 all numbers expect even numbers and 13
+  for (int i = 0, j = 1; i < 12; i++, j += 2) {
+    if (j == 13)
+      j += 2;
     coprimeTo26[i] = j;
   }
-  for (int k = 0; k < ALPHABETS; k++) {         // we recede the determinate of the key matrix from 1 to 25 using modular arithmetic operations 
-    if (!(k % 2) || k == 13) {                  // then we can easily find the mul-inverse for our specific determinate
-      inverse[k] = -1;                          // [0:25] not included the even nums or 13
-      continue;                                 //  With -1 for non coprimes to 26 nums
+// we recede the determinate of the key matrix from 1 to 25 using modular arithmetic operations
+// then we can easily find the mul-inverse for our specific determinate [0:25] not included the even nums or 13
+// With -1 for non coprimes to 26 nums
+  for (int k = 0; k < ALPHABETS; k++) {
+    if (!(k % 2) || k == 13) {
+      inverse[k] = -1;
+      continue;
     }
     for (int j = 0; j < ALPHABETS; j++) {
       if (k * j % ALPHABETS == 1) {
@@ -118,30 +124,33 @@ hillCipher::hillCipher(const int &size)
 }
 
 hillCipher::~hillCipher() { damageReverseKey(); }
-
-void hillCipher::generateRandomKey(const int &size) {                       // As mentioned before we generate a diagonal matrix key from our coprimes nums
-  key = matrix<int>(size, size, 0);                                         // uniform_int_distribution<int>(0, 11)(rng) return a random num from 0 to 11
+// As mentioned before we generate a diagonal matrix key from our coprimes nums
+void hillCipher::generateRandomKey(const int &size) {
+  key = matrix<int>(size, size, 0);
   for (int i = 0; i < size; i++) {
+// uniform_int_distribution<int>(0, 11)(rng) return a random num from 0 to 11
     key(i, i) = coprimeTo26[uniform_int_distribution<int>(0, 11)(rng)];
   }
-  int randomRowAdditions =                                                 // After generate a random diagonal key we make a random number of row 
-      uniform_int_distribution<int>(0, size)(rng) * ALPHABETS;             // operations on a random indexs of rows 
-  for (int i = 0; i < randomRowAdditions; i++) {                           // multiply random row with random number and sum the result to random row 
+  int randomRowAdditions =
+      uniform_int_distribution<int>(0, size)(rng) * ALPHABETS;
+// After generate a random diagonal key we make a random number of row operations on a random indexs of rows
+  for (int i = 0; i < randomRowAdditions; i++) {
     int firstIndex = uniform_int_distribution<int>(0, size - 1)(rng);
     int secondIndex =
         (firstIndex + uniform_int_distribution<int>(0, size - 1)(rng)) % size;
+// multiply random row with random number and sum the result to random row
     rowAddition(firstIndex, secondIndex,
                 uniform_int_distribution<int>(0, ALPHABETS - 1)(rng));
   }
-  damageReverseKey();                                                       // After we have a new key the reversekey not valid to use and it should be damaged
+  damageReverseKey();  // After we have a new key the reversekey not valid to use and it should be damaged
 }
-
-bool hillCipher::isValidKey(const matrix<int> &key) const {                 // In case u want to use your key it should be valid before set it
+// In case u want to use your key it should be valid before set it
+bool hillCipher::isValidKey(const matrix<int> &key) const {
   int det = determinantWithMod(key);
   return inverse[det] != -1;
 }
-
-bool hillCipher::setKey(const matrix<int> &key) {                           // If you want to use your own key
+// If you want to use your own key
+bool hillCipher::setKey(const matrix<int> &key) {
   if (!isValidKey(key))
     return false;
   this->key = key;
