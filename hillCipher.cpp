@@ -55,6 +55,8 @@ int hillCipher::determinantWithMod(const matrix<int> &mat) const {
 
 matrix<int> hillCipher::adjugateWithMod(const matrix<int> &mat) const {
   int size = mat.getRows();
+  if (size == 1)
+    return matrix<int>(1, 1, 1);
   matrix<int> adj(size, size);
   for (int i = 0; i < size; ++i) {
     matrix<int> tmp(size - 1, size - 1);
@@ -83,7 +85,7 @@ matrix<int> hillCipher::adjugateWithMod(const matrix<int> &mat) const {
 
 void hillCipher::rowAddition(int mulRow, int additionRow, int mulVal) {
   int len = key.getRows();
-  if (mulVal == 0 || mulRow == additionRow)
+  if (mulVal == 0)
     return;
   for (int i = 0; i < len; i++) {
     key(additionRow, i) += (key(mulRow, i) * mulVal) % ALPHABETS;
@@ -125,8 +127,10 @@ void hillCipher::generateRandomKey(const int &size) {
   int randomRowAdditions =
       uniform_int_distribution<int>(0, size)(rng) * ALPHABETS;
   for (int i = 0; i < randomRowAdditions; i++) {
-    rowAddition(uniform_int_distribution<int>(0, size - 1)(rng),
-                uniform_int_distribution<int>(0, size - 1)(rng),
+    int firstIndex = uniform_int_distribution<int>(0, size - 1)(rng);
+    int secondIndex =
+        (firstIndex + uniform_int_distribution<int>(0, size - 1)(rng)) % size;
+    rowAddition(firstIndex, secondIndex,
                 uniform_int_distribution<int>(0, ALPHABETS - 1)(rng));
   }
   damageReverseKey();
