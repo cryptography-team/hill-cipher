@@ -144,10 +144,6 @@ void hillCipher::rowAddition(const int &mulRow, const int &additionRow,
 hillCipher::hillCipher(const int &size)
     : rng(std::chrono::steady_clock::now().time_since_epoch().count()),
       key(size, size), reverseKey(NULL) {
-  // To ensure that our key has a determinant with GCD of 26 = 1,
-  // We generate a diagonal matrix with all numbers being relatively prime,
-  // Under 26, we have 12 coprimes to 26 of all numbers except even numbers and
-  // 13,
   for (int i = 0, j = 1; i < 12; i++, j += 2) {
     if (j == 13)
       j += 2;
@@ -176,9 +172,13 @@ hillCipher::hillCipher(const int &size)
 
 hillCipher::~hillCipher() { damageReverseKey(); }
 
-// We build a diagonal matrix key from our coprimes numbers, as previously
-// described.
+// We build a diagonal matrix key from our coprimes numbers, as described below.
 void hillCipher::generateRandomKey(const int &size) {
+  // To ensure that our key has a determinant with GCD of 1 with 26,
+  // we generate a diagonal matrix with all numbers being relatively prime
+  // to 26. We have 12 coprimes to 26 (all except even numbers and 13). This
+  // method is always correct since the determinant of a diagonal matrix is the
+  // product of the elements in its diagonal.
   key = matrix<int>(size, size, 0);
   for (int i = 0; i < size; i++) {
     // uniform_int_distribution<int>(0, 11)(rng) return a number between 0 and
@@ -189,7 +189,8 @@ void hillCipher::generateRandomKey(const int &size) {
       uniform_int_distribution<int>(0, size)(rng) * ALPHABETS;
 
   // Following the generation of a random diagonal key, we do a random number of
-  // row operations on a random number of row indexes
+  // row operations on a random number of row indexes. Row additions doesn't
+  // change the modulous of the matrix, so the matrix will still be valid.
   for (int i = 0; i < randomRowAdditions; i++) {
     int firstIndex = uniform_int_distribution<int>(0, size - 1)(rng);
     int secondIndex =
