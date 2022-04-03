@@ -37,9 +37,8 @@ void hillCipher::damageReverseKey() {
 
 // This function is the same as operator* in matrix.tpp file. However, it makes
 // sure that the generated matrix will have elements only in the range of [0,
-// 25]. The function assumes that the given matrices are This is done by
-// applying the modulo whenever possible in the function. This is correct since
-// the modulous operation is distributive.
+// 25]. This is done by applying the modulo whenever possible in the function.
+// This is correct since the modulous operation is distributive.
 matrix<int> hillCipher::mulWithMod(const matrix<int> &mat1,
                                    const matrix<int> &mat2) const {
   int size1 = mat1.getRows(), size2 = mat1.getCols(), size3 = mat2.getCols();
@@ -56,6 +55,8 @@ matrix<int> hillCipher::mulWithMod(const matrix<int> &mat1,
         // faster).
         if (res(i, j) >= ALPHABETS)
           res(i, j) -= ALPHABETS;
+        else if (res(i, j) < 0)
+          res(i, j) += ALPHABETS;
       }
   return res;
 }
@@ -131,7 +132,10 @@ void hillCipher::rowAddition(const int &mulRow, const int &additionRow,
   // If mulVal is 0, we don't need to continue.
   if (mulVal == 0)
     return;
-
+  if (mulRow == additionRow) {
+    std::cerr << "Error: mulRow equals additionRow";
+    exit(3);
+  }
   int len = key.getRows();
   for (int i = 0; i < len; i++) {
     // Modulous operation should be applied
