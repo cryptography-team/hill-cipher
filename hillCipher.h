@@ -13,7 +13,7 @@ using std::uniform_int_distribution;
   should be erased from memory before doing so,
 * Modular arithmetic operations work in the same way as primary matrix arithmetic operations,
   but with mod 26 applied to each operation.
-* "rng" random generation engine used to generate equal-probability random values
+* rng: random generation engine used to generate equal-probability random values
 **/
 class hillCipher {
 private:
