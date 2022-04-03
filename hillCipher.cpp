@@ -132,10 +132,6 @@ void hillCipher::rowAddition(const int &mulRow, const int &additionRow,
   // If mulVal is 0, we don't need to continue.
   if (mulVal == 0)
     return;
-  if (mulRow == additionRow) {
-    std::cerr << "Error: mulRow equals additionRow";
-    exit(3);
-  }
   int len = key.getRows();
   for (int i = 0; i < len; i++) {
     // Modulous operation should be applied
@@ -194,7 +190,7 @@ void hillCipher::generateRandomKey(const int &size) {
   for (int i = 0; i < randomRowAdditions; i++) {
     int firstIndex = uniform_int_distribution<int>(0, size - 1)(rng);
     int secondIndex =
-        (firstIndex + uniform_int_distribution<int>(0, size - 1)(rng)) % size;
+        (firstIndex + uniform_int_distribution<int>(1, size - 1)(rng)) % size;
     // Random row is multiplied by random number, and the result is added to
     // random row
     rowAddition(firstIndex, secondIndex,
