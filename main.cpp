@@ -48,10 +48,7 @@ int main() {
   hillCipher tool;
   string plain = "Muns And Yasser";
   string cipher;
-  matrix<int> key(3, 3);
-  int size;
 
-  matrix<int> reversekey(3, 3);
   cout
       << "  ================================================================\n";
   cout << "\tHill Cipher tool was initiated with a 3x3 random key.\n";
@@ -71,10 +68,7 @@ int main() {
     cout << "\n\tYour choice is [1-7]: " << flush;
     int choice;
     cin >> choice;
-    if (choice == 7)
-      break;
-    switch (choice) {
-    case 1:
+    if (choice == 1) {
       getText("plain", plain);
       cout << "\tSet your dummy letter that will be used in case the plain "
            << "text was not long enough: " << flush;
@@ -82,8 +76,7 @@ int main() {
       cin >> dummyLetter;
       cipher = tool.encrypt(plain, dummyLetter);
       printText("cipher", cipher);
-      break;
-    case 2:
+    } else if (choice == 2) {
       getText("cipher", cipher);
       plain = tool.decrypt(cipher);
       if (plain.empty() && !cipher.empty())
@@ -91,19 +84,15 @@ int main() {
              << "matrix size (add some dummy letters)\n";
       else
         printText("plain", plain);
-      break;
-    case 3:
+    } else if (choice == 3) {
       cout << tool.getKey();
-      break;
-    case 4:
+    } else if (choice == 4) {
       cout << tool.getReverseKey();
-      break;
-    case 5:
-      int size;
+    } else if (choice == 5) {
       cout << "\tSet your key size: " << flush;
+      int size;
       cin >> size;
-      key = matrix<int>(size, size);
-      reversekey = matrix<int>(size, size);
+      matrix<int> key(size, size);
       cout << "\tEnter your " << size << 'x' << size
            << " key (one row on each line):" << endl;
       for (int i = 0; i < size; i++) {
@@ -111,19 +100,21 @@ int main() {
         for (int j = 0; j < size; j++)
           cin >> key(i, j);
       }
+      cout << endl;
       if (!tool.setKey(key))
         cout << "\tSad.. Not a valid key.. This key will not be set.";
       else
         cout << "\tPerfecto.. The key has been set.";
       cout << endl;
-      break;
-    case 6:
+    } else if (choice == 6) {
       cout << "\tSet your key size: " << flush;
+      int size;
       cin >> size;
       tool.generateRandomKey(size);
       cout << "\tThis random key has been set:\n" << tool.getKey();
+    } else if (choice == 7) {
       break;
-    default:
+    } else {
       cout << "\tPlease enter a valid option..." << endl;
     }
     cout << endl;
