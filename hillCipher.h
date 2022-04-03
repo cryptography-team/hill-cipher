@@ -8,13 +8,16 @@
 
 using std::string;
 using std::uniform_int_distribution;
+
 /**
-* Use reversekey as a pointer since it should be destroyed in some instances = NULL,
-  should be erased from memory before doing so,
-* Modular arithmetic operations work in the same way as primary matrix arithmetic operations,
-  but with mod 26 applied to each operation.
-* rng: random generation engine used to generate equal-probability random values
-**/
+ * Use reversekey as a pointer since it should be destroyed in some instances =
+NULL, should be erased from memory before doing so.
+ * Modular arithmetic operations work in the same way as primary matrix
+arithmetic operations, but with mod 26 applied to each operation.
+ * rng: random generation engine used to generate equal-probability random
+values
+ **/
+
 class hillCipher {
 private:
   enum { ALPHABETS = 26 };
@@ -30,7 +33,8 @@ private:
   int determinantWithMod(const matrix<int> &mat) const;
   matrix<int> adjugateWithMod(const matrix<int> &mat) const;
 
-  void rowAddition(int mulRow, int additionRow, int mulVal);
+  void rowAddition(const int &mulRow, const int &additionRow,
+                   const int &mulVal);
 
 public:
   hillCipher(const int &size = 3);
@@ -48,4 +52,3 @@ public:
 };
 
 #endif
-
