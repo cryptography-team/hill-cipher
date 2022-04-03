@@ -97,7 +97,7 @@ void hillCipher::rowAddition(int mulRow, int additionRow, int mulVal) {
 hillCipher::hillCipher(const int &size)
     : rng(std::chrono::steady_clock::now().time_since_epoch().count()),
       key(size, size), reverseKey(NULL) {
-// To ensure that our key has a determinate with GCD of 26 = 1,
+// To ensure that our key has a determinant with GCD of 26 = 1,
 // We generate a diagonal matrix with all numbers being relatively prime,
 // Under 26, we have 12 coprimes to 26 of all numbers except even numbers and 13,
   for (int i = 0, j = 1; i < 12; i++, j += 2) {
@@ -105,8 +105,8 @@ hillCipher::hillCipher(const int &size)
       j += 2;
     coprimeTo26[i] = j;
   }
-// Using modular arithmetic techniques, we retracted the determinate of the key matrix from 1 to 25.
-// The mul-inverse for our unique determinate [0:25] not include the even nums or 13 is then easily found.
+// Using modular arithmetic techniques, we retracted the determinant of the key matrix from 1 to 25.
+// The mul-inverse for our unique determinant [0:25] not include the even nums or 13 is then easily found.
 // Non-coprimes with 26 numbers get a -1.
   for (int k = 0; k < ALPHABETS; k++) {
     if (!(k % 2) || k == 13) {
