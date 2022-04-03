@@ -11,13 +11,15 @@ using std::uniform_int_distribution;
 
 /**
  * Use reversekey as a pointer since it should be destroyed in some instances =
-NULL, should be erased from memory before doing so.
+   NULL, should be erased from memory before doing so.
  * Modular arithmetic operations work in the same way as primary matrix
-arithmetic operations, but with mod 26 applied to each operation.
+   arithmetic operations, but with mod 26 applied to each operation.
  * rng: random generation engine used to generate equal-probability random
-values
+   values
+ * The algorithm is to multiply every sequence of characters in plain text by the key,
+   which we achieved in one operation by fitting all strings in one matrix with size of columns equal to key size 
+   and number of rows equal to string size divided by key size
  **/
-
 class hillCipher {
 private:
   enum { ALPHABETS = 26 };
