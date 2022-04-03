@@ -153,6 +153,7 @@ hillCipher::hillCipher(const int &size)
       j += 2;
     coprimeTo26[i] = j;
   }
+
   // Using modular arithmetic techniques, we retracted the determinant of the
   // key matrix from 1 to 25. The mul-inverse for our unique determinant [0:25]
   // not include the even nums or 13 is then easily found. Non-coprimes with 26
@@ -169,6 +170,7 @@ hillCipher::hillCipher(const int &size)
       }
     }
   }
+
   generateRandomKey(size); // initialize key matrix and generate it randomly
 }
 
@@ -185,17 +187,20 @@ void hillCipher::generateRandomKey(const int &size) {
   }
   int randomRowAdditions =
       uniform_int_distribution<int>(0, size)(rng) * ALPHABETS;
+
   // Following the generation of a random diagonal key, we do a random number of
   // row operations on a random number of row indexes
   for (int i = 0; i < randomRowAdditions; i++) {
     int firstIndex = uniform_int_distribution<int>(0, size - 1)(rng);
     int secondIndex =
         (firstIndex + uniform_int_distribution<int>(1, size - 1)(rng)) % size;
+
     // Random row is multiplied by random number, and the result is added to
     // random row
     rowAddition(firstIndex, secondIndex,
                 uniform_int_distribution<int>(0, ALPHABETS - 1)(rng));
   }
+
   damageReverseKey(); // After we get a new key, the reversekey is no longer
                       // valid and should be destroyed
 }
@@ -226,15 +231,18 @@ const matrix<int> &hillCipher::getReverseKey() {
 
 string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
   int numOfChars = 0;
+
   // To begin, count how many valid characters there are in the plain string.
   for (const char &c : plainText)
     numOfChars += ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
+
   if (!numOfChars)
     return "";
   int j = 0, k = 0, len = plainText.size(), matSize = key.getRows();
+
   // Fit all characters into a single matrix, with column sizes equaling key row
-  // sizes. In case (numOfChars % 26!= 0), the amount of rows =((numOfChars +
-  // matSize - 1) / matSize) to fit all characters.
+  // sizes. In case (numOfChars % 26 != 0), the amount of rows is ceiled using
+  // the equation to fit all characters (plus dummy characters if needed).
   matrix<int> textMat((numOfChars + matSize - 1) / matSize, matSize);
   for (int i = 0; i < len; ++i) {
     char c = plainText[i];
@@ -251,6 +259,7 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
       k = 0;
     }
   }
+
   // If there are any empty elements in the text mat after fitting all
   // characters, the dummy char should be used to fill them.
   if (k != 0) {
@@ -261,13 +270,13 @@ string hillCipher::encrypt(const string &plainText, char dummyLetter) const {
       ++numOfChars;
     }
   }
-  // The text-matrix multiplied by the key The encryption text is returned as a
-  // result.
+
+  // The cipher text is returned as a result.
   textMat = mulWithMod(textMat, key);
+
   string cipherText(numOfChars, 'A');
   j = 0;
   k = 0;
-
   for (int i = 0; i < numOfChars; ++i) {
     cipherText[i] += textMat(j, k);
     ++k;
@@ -286,15 +295,17 @@ string hillCipher::decrypt(const string &cipherText) {
   int len = key.getRows();
   if (size % len)
     return "";
+
   // Check to see if we have a valid reversekey, and if not, fix it.
   fixReverseKey();
-  // For the next step, palin-matrix = cipher-matrix
+
+  // For the next step, we will store the cipher text in a matrix called plain.
   matrix<int> plain(size / len, len);
+
   for (int i = 0; i < size; i += len) {
     for (int j = 0; j < len; j++)
       plain(i / len, j) = cipherText[i + j] - 'A';
   }
-  // plain-materix = plain-matrix * reversekey
   plain = mulWithMod(plain, *reverseKey);
   const int &rows = plain.getRows(), &cols = len;
   string res;
