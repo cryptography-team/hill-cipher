@@ -1,7 +1,6 @@
 #ifndef MATRIX_HEADER
 #define MATRIX_HEADER
 
-#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -10,6 +9,12 @@ using std::max;
 using std::min;
 using std::ostream;
 using std::string;
+
+/**
+ * This is a template class that can deal with many basic functionalities of the
+ * matrix. The elements in it is defined in **data as a 2D dynamic array. Errors
+ * are handled by the standard error stream (cerr).
+ **/
 
 template <typename T> class matrix {
 private:
