@@ -6,6 +6,9 @@
 using namespace std;
 
 void getText(const string &type, string &text) {
+  // flush: it makes sure that the text sent to cout is sent out from the buffer
+  // to the screen, so that the user can see what is the question he needs to
+  // answer
   cout << "\tThe last " << type << " text was \"" << text << "\"..\n\t"
        << "Continue with this " << type << " text? (Y/n): " << flush;
   char ch;
@@ -23,7 +26,14 @@ void getText(const string &type, string &text) {
         text += tmp;
     } else {
       cout << "\tSet your " << type << " text (in one line):\n\t" << flush;
+      // The input cursor is at the last place where input was taken using cin,
+      // so when we use cin.ignore(), it moves down to the current location. Not
+      // using this function yields in invalid input (the line read using
+      // getline will be an empty line for example).
       cin.ignore();
+
+      // getline -by default- takes input from the user until he presses the
+      // return key
       getline(cin, text);
     }
   }
