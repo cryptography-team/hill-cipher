@@ -16,9 +16,10 @@ using std::uniform_int_distribution;
    arithmetic operations, but with mod 26 applied to each operation.
  * rng: random generation engine used to generate equal-probability random
    values
- * The algorithm is to multiply every sequence of characters in plain text by the key,
-   which we achieved in one operation by fitting all strings in one matrix with size of columns equal to key size 
-   and number of rows equal to string size divided by key size
+ * The algorithm is to multiply every sequence of characters in plain text by
+ the key, which we achieved in one operation by fitting all strings in one
+ matrix with size of columns equal to key size and number of rows equal to
+ string size divided by key size
  **/
 class hillCipher {
 private:
