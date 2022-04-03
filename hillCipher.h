@@ -24,7 +24,8 @@ private:
   int determinantWithMod(const matrix<int> &mat) const;
   matrix<int> adjugateWithMod(const matrix<int> &mat) const;
 
-  void rowAddition(int mulRow, int additionRow, int mulVal);
+  void rowAddition(const int &mulRow, const int &additionRow,
+                   const int &mulVal);
 
 public:
   hillCipher(const int &size = 3);
