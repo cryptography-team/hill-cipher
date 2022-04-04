@@ -186,7 +186,7 @@ void hillCipher::generateRandomKey(const int &size) {
     key(i, i) = coprimeTo26[uniform_int_distribution<int>(0, 11)(rng)];
   }
   int randomRowAdditions =
-      uniform_int_distribution<int>(0, size)(rng) * ALPHABETS;
+      uniform_int_distribution<int>(0, size * ALPHABETS)(rng);
 
   // Following the generation of a random diagonal key, we do a random number of
   // row operations on a random number of row indexes. Row additions doesn't
