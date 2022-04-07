@@ -143,7 +143,7 @@ void hillCipher::rowAddition(const int &mulRow, const int &additionRow,
 
 hillCipher::hillCipher(const int &size)
     : rng(std::chrono::steady_clock::now().time_since_epoch().count()),
-      key(size, size), reverseKey(NULL) {
+      reverseKey(NULL) {
   for (int i = 0, j = 1; i < 12; i++, j += 2) {
     if (j == 13)
       j += 2;
