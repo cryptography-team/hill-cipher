@@ -1,0 +1,84 @@
+empty :=
+space := $(empty) $(empty)
+
+SRCDIR := ./src
+HDRDIR := ./headers
+OBJDIR := ./build/obj
+DEPDIR := ./build/deps
+BINDIR := .
+TARGET := $(BINDIR)/$(subst $(space),_,$(shell basename "${PWD}")).exe
+
+###### extra variables #######
+
+###### complier set-up ######
+CC = gcc
+CFLAGS = -Wextra
+CXX = g++
+CXXFLAGS = $(CFLAGS)
+LD = g++
+LDFLAGS = $(CXXFLAGS)
+DEBUGGER = gdb
+
+ifdef RELEASE
+	maketype := RELEASE
+	CFLAGS += -O3 -march=native
+	CXXFLAGS += -std=c++17
+	LDFLAGS += -flto=full
+else ifdef DEBUG
+	maketype := DEBUG
+	CFLAGS += -O0 -g
+else ifdef THREADS
+	maketype := THREADS
+	CFLAGS += -O2 -march=native -pthread
+	CXXFLAGS += -std=c++17
+	LDFLAGS += -flto=full
+else
+	maketype := NORMAL
+	CFLAGS += -O0
+	CXXFLAGS += -O0 -std=c++14
+endif
+
+OUTPUT_OPTION = -I $(HDRDIR) -I $(SRCDIR) -MMD -MP
+
+SRCS := $(wildcard $(SRCDIR)/**/*.cpp)
+SRCS += $(wildcard $(SRCDIR)/*.cpp)
+SRCS += $(wildcard $(SRCDIR)/**/*.c)
+SRCS += $(wildcard $(SRCDIR)/*.c)
+DEPS := $(patsubst $(SRCDIR)/%,$(DEPDIR)/%.d,$(SRCS))
+OBJS := $(patsubst $(SRCDIR)/%,$(OBJDIR)/%.o,$(SRCS))
+
+.PHONY: all
+all : $(TARGET)
+
+.PHONY: init
+init :
+	-@rm -rf build $(wildcard *.exe)
+	@mkdir -p $(SRCDIR) $(HDRDIR)
+	-@for i in $(wildcard *.cpp) $(wildcard *.c) $(wildcard *.tpp) $(wildcard *.txt); do mv ./$$i $(SRCDIR)/$$i; done
+	-@for i in $(wildcard *.h); do mv ./$$i $(HDRDIR)/$$i; done
+	-@mkdir -p $(OBJDIR) $(DEPDIR)
+
+$(TARGET): $(OBJS)
+	-@echo LD $(maketype) $< "->" $@ && $(LD) $(LDFLAGS) $(OBJS) -o $@
+
+$(OBJDIR)/%.cpp.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(OBJDIR) $(DEPDIR)
+	-@echo CXX $(maketype) $< "->" $@ && \
+		$(CXX) $(CXXFLAGS) -c $< $(OUTPUT_OPTION) \
+		-o $@ -MF $(DEPDIR)/$(<F).d
+
+$(OBJDIR)/%.c.o: $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR) $(DEPDIR)
+	-@echo CC $(maketype) $< "->" $@ && \
+		$(CC) $(CFLAGS) -c $< $(OUTPUT_OPTION) \
+		-o $@ -MF $(DEPDIR)/$(<F).d
+
+.PHONY: clean
+clean: 
+	-$(RM) $(OBJS) $(DEPS) $(TARGET)
+
+.PHONY: debug
+debug: $(TARGET)
+	$(DEBUGGER) $(TARGET)
+
+-include $(DEPS)
