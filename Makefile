@@ -38,7 +38,7 @@ else
 	CXXFLAGS += -O0 -std=c++14
 endif
 
-OUTPUT_OPTION = -I $(HDRDIR) -I $(SRCDIR) -MMD -MP
+OUTPUT_OPTION = -I $(HDRDIR) -I $(SRCDIR) -I $(BINDIR) -MMD -MP
 
 SRCS := $(wildcard $(SRCDIR)/**/*.cpp)
 SRCS += $(wildcard $(SRCDIR)/*.cpp)
@@ -54,7 +54,7 @@ all : $(TARGET)
 init :
 	-@rm -rf build $(wildcard *.exe)
 	@mkdir -p $(SRCDIR) $(HDRDIR)
-	-@for i in $(wildcard *.cpp) $(wildcard *.c) $(wildcard *.tpp) $(wildcard *.txt); do mv ./$$i $(SRCDIR)/$$i; done
+	-@for i in $(wildcard *.cpp) $(wildcard *.c) $(wildcard *.tpp); do mv ./$$i $(SRCDIR)/$$i; done
 	-@for i in $(wildcard *.h); do mv ./$$i $(HDRDIR)/$$i; done
 	-@mkdir -p $(OBJDIR) $(DEPDIR)
 
